@@ -1,7 +1,7 @@
-export default function PostWidget() {
+export function PostWidget() {
   return (
     <div>
-      
+      PostWidget
     </div>
   )
 }
