@@ -1,7 +1,7 @@
-export default function Categories() {
+export function Categories() {
   return (
-    <div>
-      
+    <div className='text-gre'>
+      Categories
     </div>
   )
 }
