@@ -19,3 +19,9 @@ export type Author = {
   }
   id: string
 }
+
+export type Categorie = {
+  name: string
+  slug: string
+  id: string
+}

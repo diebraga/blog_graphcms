@@ -1,9 +1,10 @@
+import { gql, useQuery } from '@apollo/client'
 import Link from 'next/link'
+import { Categorie } from '../../@types'
 
 export default function Header() {
-  const categories = [
-    {name: 'name', slug: 'name'}
-  ]
+  const categories = useQuery(getCategories)
+  
   return (
     <div className='container mx-auto px-10 mb-8'>
       <div className='border-b w-full inline-block border-gray-400 py-8'>
@@ -15,11 +16,11 @@ export default function Header() {
           </Link>
         </div>
         <div className='hidden md:float-left md:contents'>
-          {categories.map((categorie, index) => {
+          {categories.data?.categories.map((category: Categorie, index: number) => {
             return (
-              <Link key={categorie.slug} href={`/category/${categorie.slug}`}>
+              <Link key={category.slug} href={`/category/${category.slug}`}>
                 <span className='md:float-right mt-2 align-middle text-white ml-4 font-semibold cursor-pointer'>
-                  {categorie.name}
+                  {category.name}
                 </span>
               </Link>
             )
@@ -29,3 +30,13 @@ export default function Header() {
     </div>
   )
 }
+
+const getCategories = gql`
+  query GetCategories {
+    categories {
+      id
+      name
+      slug
+    }
+  }
+`
