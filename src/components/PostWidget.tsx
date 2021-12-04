@@ -1,10 +1,15 @@
 import Link from 'next/link'
 import moment from "moment";
 import { gql, useQuery } from '@apollo/client';
-import { BlogPost } from '../../@types';
+import { BlogPost, Categorie } from '../../@types';
 import { getRecentPosts, getSimilarPosts } from '../graphql/queries';
 
-export function PostWidget({ categories, slug }) {
+type PostWidgetProps = {
+  category?: Categorie
+  slug?: string
+}
+
+export function PostWidget({ category, slug }: PostWidgetProps) {
   const recentPosts = useQuery(getRecentPosts)
   const similarPosts = useQuery(getSimilarPosts)
 

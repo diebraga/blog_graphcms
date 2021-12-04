@@ -3,8 +3,6 @@ import Head from 'next/head';
 import { Categories } from '../components/Categories';
 import { PostCard } from '../components/PostCard';
 import { PostWidget } from '../components/PostWidget';
-import { gql } from '@apollo/client';
-import { apolloClient } from '../lib/apolloClient';
 import { BlogPost } from '../../@types';
 import { GetPosts } from '../graphql/queries';
 

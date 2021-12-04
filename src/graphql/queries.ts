@@ -39,6 +39,43 @@ export async function GetPosts() {
   return getPosts.data
 }
 
+export async function GetPostDetail(slug: string) {
+  const getPost = await apolloClient.query({
+    query: gql`
+    query GetPost {
+      post(where: {slug: "next12"}) {
+        id
+        title
+        exerpt
+        banner {
+          url
+        }
+        author {
+          id
+          name
+          bio
+          avatar {
+            url
+          }
+        }
+        createdAt
+        slug
+        content {
+          html
+        }
+      }
+      categories {
+        id
+        name
+        slug
+      }
+    } 
+    `
+  })
+
+  return getPost.data
+}
+
 export const getRecentPosts = gql`
   query GetRecentPosts {
     posts(orderBy: createdAt_ASC, last: 3) {

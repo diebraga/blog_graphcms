@@ -6,9 +6,13 @@ export type BlogPost = {
     slug: string  
     author: Author
     createdAt: string
+    content: {
+      html: string
+    }
     banner: {
       url: string
     }
+    categories: Categorie[]
   }
 }
 
