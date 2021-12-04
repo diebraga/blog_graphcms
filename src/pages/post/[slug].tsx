@@ -18,7 +18,7 @@ export default function PostDetailPage({ blogPost }: PostDetailPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="col-span-1 lg:col-span-8">
           <PostDetail post={blogPost}/>
-          {/* <Author author={blogPost.author}/> */}
+          <Author author={blogPost.author}/>
           {/* <AdjacentPosts slug={post.slug} createdAt={post.createdAt} /> */}
           {/* <CommentsForm slug={blogPost.slug}/> */}
           <Comments />

@@ -5,8 +5,8 @@ import { BlogPost } from "../../@types"
 type PostDetailProps = {
   post: BlogPost['node']
 }
+
 export function PostDetail({ post }: PostDetailProps) {
-  console.log(post.content.html)
   return (
     <div className='bg-white shadow-lg rounded-lg lg:p-8 pb-12 mb-8'> 
       <div className="relative overflow-hidden shadow-md mb-6">

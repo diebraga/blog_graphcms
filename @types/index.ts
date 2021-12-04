@@ -22,6 +22,7 @@ export type Author = {
     url: string
   }
   id: string
+  bio: string
 }
 
 export type Categorie = {
