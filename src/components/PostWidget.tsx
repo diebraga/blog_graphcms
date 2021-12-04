@@ -2,6 +2,7 @@ import Link from 'next/link'
 import moment from "moment";
 import { gql, useQuery } from '@apollo/client';
 import { BlogPost } from '../../@types';
+import { getRecentPosts, getSimilarPosts } from '../graphql/queries';
 
 export function PostWidget({ categories, slug }) {
   const recentPosts = useQuery(getRecentPosts)
@@ -33,32 +34,3 @@ export function PostWidget({ categories, slug }) {
   )
 }
 
-const getRecentPosts = gql`
-  query GetRecentPosts {
-    posts(orderBy: createdAt_ASC, last: 3) {
-      id
-      title
-      slug
-      createdAt
-      banner {
-        url
-      }
-    }
-  }
-`
-
-const getSimilarPosts = gql`
-  query GetPostDetails($slug: String!, $categories: [String!]) {
-    posts(
-      where: {slug_not: $slug, AND: {categories_some: {slug_in: $categories}}}
-      last: 3
-    ) {
-      title
-      banner {
-        url
-      }
-      createdAt
-      slug
-    }
-  }
-`

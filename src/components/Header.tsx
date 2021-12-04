@@ -1,10 +1,11 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { Categorie } from '../../@types'
+import { getCategories } from '../graphql/queries'
 
 export default function Header() {
   const categories = useQuery(getCategories)
-  
+
   return (
     <div className='container mx-auto px-10 mb-8'>
       <div className='border-b w-full inline-block border-gray-400 py-8'>
@@ -31,12 +32,3 @@ export default function Header() {
   )
 }
 
-const getCategories = gql`
-  query GetCategories {
-    categories {
-      id
-      name
-      slug
-    }
-  }
-`

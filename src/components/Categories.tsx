@@ -1,6 +1,7 @@
 import { gql, useQuery } from "@apollo/client"
 import { Categorie } from "../../@types"
 import Link from 'next/link'
+import { getCategories } from "../graphql/queries"
 
 export function Categories() {
   const categories = useQuery(getCategories)
@@ -17,12 +18,3 @@ export function Categories() {
   )
 }
 
-const getCategories = gql`
-  query GetCategories {
-    categories {
-      id
-      name
-      slug
-    }
-  }
-`

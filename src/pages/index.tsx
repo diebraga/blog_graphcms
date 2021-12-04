@@ -6,6 +6,7 @@ import { PostWidget } from '../components/PostWidget';
 import { gql } from '@apollo/client';
 import { apolloClient } from '../lib/apolloClient';
 import { BlogPost } from '../../@types';
+import { GetPosts } from '../graphql/queries';
 
 type BlogPostsProps = {
   blogPosts: BlogPost[]
@@ -43,40 +44,7 @@ const Home = ({ blogPosts }: BlogPostsProps) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => { 
-  const { data } = await apolloClient.query({
-    query: gql`
-    query MyQuery {
-      postsConnection {
-        edges {
-          node {
-            author {
-              id
-              name
-              bio
-              avatar {
-                url
-              }
-            }
-            createdAt
-            id
-            title
-            slug
-            exerpt
-            banner {
-              url
-            }
-            categories {
-              id
-              name
-              slug
-            }
-          }
-        }
-      }
-    }
-    `
-  })
-
+  const data = await GetPosts()
   return {
     props: {
       blogPosts: data.postsConnection.edges
