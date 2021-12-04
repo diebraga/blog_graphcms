@@ -1,15 +1,17 @@
-import type { NextPage } from 'next';
+import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import { Categories } from '../components/Categories';
 import { PostCard } from '../components/PostCard';
 import { PostWidget } from '../components/PostWidget';
+import { gql } from '@apollo/client';
+import { apolloClient } from '../lib/apolloClient';
+import { BlogPost } from '../../@types';
 
-const Home: NextPage = () => {
+type BlogPostsProps = {
+  blogPosts: BlogPost[]
+}
 
-  const posts = [
-    {title: 'aaaaaaaaaaa', exerpt: 'bbbbbbbbb'},
-    {title: 'aaaaaaaaaaa', exerpt: 'bbbbbbbbb'}
-  ]
+const Home = ({ blogPosts }: BlogPostsProps) => {
   return (
     <div className='container mx-auto px-10 mb-8'>
       <Head>
@@ -20,7 +22,11 @@ const Home: NextPage = () => {
 
       <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
         <div className='lg:col-span-8 col-span-1'>
-          {posts.map((post, index) => <PostCard key={index} post={post}/> )}
+          {blogPosts.map((post, index) => {
+            return (
+                <PostCard key={index} post={post.node}/>
+              )} 
+            )}
         </div>
 
         <div className='lg:col-span-4 col-span-1'>
@@ -35,3 +41,45 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => { 
+  const { data } = await apolloClient.query({
+    query: gql`
+    query MyQuery {
+      postsConnection {
+        edges {
+          node {
+            author {
+              id
+              name
+              bio
+              avatar {
+                url
+              }
+            }
+            createdAt
+            id
+            title
+            slug
+            exerpt
+            banner {
+              url
+            }
+            categories {
+              id
+              name
+              slug
+            }
+          }
+        }
+      }
+    }
+    `
+  })
+
+  return {
+    props: {
+      blogPosts: data.postsConnection.edges
+    },
+  };
+};

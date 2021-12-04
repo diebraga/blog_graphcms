@@ -1,5 +1,11 @@
 export type BlogPost = {
-  // id: string
-  title: string
-  exerpt: string
+  node: {
+    id: string
+    title: string
+    exerpt: string
+    slug: string  
+    banner: {
+      url: string
+    }
+  }
 }
