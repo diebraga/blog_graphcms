@@ -30,3 +30,11 @@ export type Categorie = {
   slug: string
   id: string
 }
+
+export type Comment = {
+  name: string
+  content: string
+  createdAt: string
+  id: string
+  email: string
+}

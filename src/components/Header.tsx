@@ -12,7 +12,7 @@ export default function Header() {
         <div className='md:float-left block'>
           <Link href='/' passHref>
             <span className='cursor-pointer font-bold text-4xl text-white'>
-              Little Blog
+              GraphCMS
             </span>
           </Link>
         </div>

@@ -119,4 +119,14 @@ export const getCategories = gql`
   }
 `
 
-
+export const GET_POST_COMMENTS = gql`
+  query GetPostComments($slug: String!) {
+    comments(where: {post: {slug: $slug}}) {
+      id
+      name
+      email
+      content
+      createdAt
+    }
+  }
+`
