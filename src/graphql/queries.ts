@@ -130,3 +130,22 @@ export const GET_POST_COMMENTS = gql`
     }
   }
 `
+
+export const GET_FEATURED_POSTS = gql`
+  query GetFeaturedPosts {
+    posts(where: {isFeatured: true}) {
+      author {
+        name
+        avatar {
+          url
+        }
+      }
+      banner {
+        url
+      }
+      title
+      slug
+      createdAt
+    }
+  }
+`
