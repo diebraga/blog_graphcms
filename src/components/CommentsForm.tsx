@@ -1,11 +1,16 @@
 import { useMutation } from "@apollo/client";
+import { useEffect } from "react";
 import { useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form"
-import { ADD_COMMENT } from "../graphql/mutations";
+import { Toaster, toast } from "react-hot-toast";
+import { Author } from "../../@types";
+import { ADD_COMMENT, PUBLISH_COMMENT } from "../graphql/mutations";
 import { useLocalStorage } from "../utils/useLocalStorage";
+import SuccessCommentToast from "./toasts/SuccessCommentToast";
 
 type CommentsFormProps = {
   slug: string
+  author: Author
 }
 
 type OnSubmitData = {
@@ -14,9 +19,18 @@ type OnSubmitData = {
   email: string
 }
 
-export function CommentsForm({ slug }: CommentsFormProps) {
+export function CommentsForm({ slug, author }: CommentsFormProps) {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [addComment, { data, loading, error }] = useMutation(ADD_COMMENT);
+  const [addComment, { data, loading }] = useMutation(ADD_COMMENT, {
+    onError(err: any) {
+      toast.error(err.message)
+    }
+  });
+  const [publishComment, publishCommentStatus] = useMutation(PUBLISH_COMMENT, {
+    onError(err: any) {
+      toast.error(err.message)
+    }
+  });
 
   const storeData = useRef(null)
 
@@ -25,7 +39,6 @@ export function CommentsForm({ slug }: CommentsFormProps) {
 
   
   const onSubmit: SubmitHandler<OnSubmitData> = async (formData) => {    
-    console.log(formData)
     addComment({
       variables: {
         name: formData.name,
@@ -33,7 +46,7 @@ export function CommentsForm({ slug }: CommentsFormProps) {
         content: formData.content,
         slug: slug
       }
-    })
+    })  
     // @ts-ignore
     if (storeData.current?.checked) {
       setName(formData.name)
@@ -43,11 +56,30 @@ export function CommentsForm({ slug }: CommentsFormProps) {
       setEmail('')
     }
   }
-  console.log(loading)
-  console.log(data)
-  console.log(error)
+
+  useEffect(() => {
+    if (data) {
+      toast.custom((item) => (
+        <SuccessCommentToast
+          item={item}
+          onClose={() => toast.dismiss(item.id)} 
+          author={author}
+        />
+      ))
+      publishComment({
+        variables: {
+          id: data.createComment.id
+        }
+      })
+    }  
+  }, [data])
 
   return (
+    <>
+    <Toaster
+      position="top-center"
+      reverseOrder={false}
+    />
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">Leave a Reply</h3>
       <div className="grid grid-cols-1 gap-4 mb-4">
@@ -92,8 +124,9 @@ export function CommentsForm({ slug }: CommentsFormProps) {
       {errors.name && <p className="text-xs text-red-500 mb-1">{errors.name.message}!</p>}
       {errors.email && <p className="text-xs text-red-500 mb-1">{errors.email.message}!</p>}
       <div className="mt-8">
-        <button type="submit" className="transition duration-500 ease transform hover:-translate-y-1 inline-block bg-blue-900 text-lg font-bold rounded-md text-white px-8 py-3 cursor-pointer">Post Comment</button>
+        <button disabled={loading} type="submit" className="transition duration-500 ease transform hover:-translate-y-1 inline-block bg-blue-900 text-lg font-bold rounded-md text-white px-8 py-3 cursor-pointer">Post Comment</button>
       </div>
     </form>
+    </>
   )
 }

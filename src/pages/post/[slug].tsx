@@ -20,7 +20,7 @@ export default function PostDetailPage({ blogPost }: PostDetailPageProps) {
           <PostDetail post={blogPost}/>
           <Author author={blogPost.author}/>
           {/* <AdjacentPosts slug={post.slug} createdAt={post.createdAt} /> */}
-          <CommentsForm slug={blogPost.slug}/>
+          <CommentsForm slug={blogPost.slug} author={blogPost.author}/>
           <Comments />
         </div>
         <div className="col-span-1 lg:col-span-4">
