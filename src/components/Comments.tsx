@@ -12,7 +12,7 @@ export default function Comments({ slug }: CommentsProps) {
   const { loading, error, data } = useQuery(GET_POST_COMMENTS, {
     variables: { slug }
   });
-console.log(data)
+
   return (
     <>
       {loading && (

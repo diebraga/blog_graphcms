@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { Toaster, toast } from "react-hot-toast";
 import { Author } from "../../@types";
 import { ADD_COMMENT, PUBLISH_COMMENT } from "../graphql/mutations";
+import { GET_POST_COMMENTS } from "../graphql/queries";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import SuccessCommentToast from "./toasts/SuccessCommentToast";
 
@@ -20,13 +21,15 @@ type OnSubmitData = {
 }
 
 export function CommentsForm({ slug, author }: CommentsFormProps) {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, reset, handleSubmit, formState: { errors } } = useForm();
   const [addComment, { data, loading }] = useMutation(ADD_COMMENT, {
     onError(err: any) {
       toast.error(err.message)
     }
   });
   const [publishComment, publishCommentStatus] = useMutation(PUBLISH_COMMENT, {
+    refetchQueries: [{query: GET_POST_COMMENTS, variables: {slug}}],
+    awaitRefetchQueries: true,
     onError(err: any) {
       toast.error(err.message)
     }
@@ -37,7 +40,6 @@ export function CommentsForm({ slug, author }: CommentsFormProps) {
   const [savedName, setName] = useLocalStorage('name', '') 
   const [savedEmail, setEmail] = useLocalStorage('email', '') 
 
-  
   const onSubmit: SubmitHandler<OnSubmitData> = async (formData) => {    
     addComment({
       variables: {
@@ -71,6 +73,7 @@ export function CommentsForm({ slug, author }: CommentsFormProps) {
           id: data.createComment.id
         }
       })
+      reset({ content: '' })
     }  
   }, [data])
 
