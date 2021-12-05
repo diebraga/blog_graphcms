@@ -42,8 +42,8 @@ export async function GetPosts() {
 export async function GetPostDetail(slug: string) {
   const getPost = await apolloClient.query({
     query: gql`
-    query GetPost {
-      post(where: {slug: "next12"}) {
+    query GetPost($slug: String) {
+      post(where: {slug: $slug}) {
         id
         title
         exerpt
@@ -70,7 +70,10 @@ export async function GetPostDetail(slug: string) {
         slug
       }
     } 
-    `
+    `, 
+    variables: {
+      slug: slug
+    }
   })
 
   return getPost.data
@@ -115,3 +118,5 @@ export const getCategories = gql`
     }
   }
 `
+
+
