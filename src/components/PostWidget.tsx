@@ -2,7 +2,7 @@ import Link from 'next/link'
 import moment from "moment";
 import { gql, useQuery } from '@apollo/client';
 import { BlogPost, Categorie } from '../../@types';
-import { getRecentPosts, getSimilarPosts } from '../graphql/queries';
+import { getRecentPosts } from '../graphql/queries';
 
 type PostWidgetProps = {
   category?: Categorie
@@ -11,12 +11,11 @@ type PostWidgetProps = {
 
 export function PostWidget({ category, slug }: PostWidgetProps) {
   const recentPosts = useQuery(getRecentPosts)
-  const similarPosts = useQuery(getSimilarPosts)
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">
-        {slug ? 'Related Posts' : 'Recent Posts'}
+        {'Recent Posts'}
       </h3>
       {recentPosts.data?.posts.map((post: BlogPost['node'], index: number) => (
         <div key={index} className="flex items-center w-full mb-4">
