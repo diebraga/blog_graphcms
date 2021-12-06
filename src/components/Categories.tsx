@@ -1,10 +1,10 @@
 import { gql, useQuery } from "@apollo/client"
 import { Categorie } from "../../@types"
 import Link from 'next/link'
-import { getCategories } from "../graphql/queries"
+import { GET_CATEGORIES } from "../graphql/queries"
 
 export function Categories() {
-  const categories = useQuery(getCategories)
+  const categories = useQuery(GET_CATEGORIES)
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">

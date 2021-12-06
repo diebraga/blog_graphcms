@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { Categorie } from '../../@types'
-import { getCategories } from '../graphql/queries'
+import { GET_CATEGORIES } from '../graphql/queries'
 
 export default function Header() {
-  const categories = useQuery(getCategories)
+  const categories = useQuery(GET_CATEGORIES)
 
   return (
     <div className='container mx-auto px-10 mb-8'>
@@ -19,7 +19,7 @@ export default function Header() {
         <div className='hidden md:float-left md:contents'>
           {categories.data?.categories.map((category: Categorie, index: number) => {
             return (
-              <Link key={category.slug} href={`/category/${category.slug}`}>
+              <Link key={index} href={`/category/${category.slug}`}>
                 <span className='md:float-right mt-2 align-middle text-white ml-4 font-semibold cursor-pointer'>
                   {category.name}
                 </span>

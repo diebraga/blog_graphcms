@@ -5,7 +5,7 @@ export async function GetPosts() {
   const getPosts = await apolloClient.query({
     query: gql`
     query GetPosts {
-      postsConnection {
+      postsConnection(orderBy: createdAt_DESC) {
         edges {
           node {
             author {
@@ -81,7 +81,7 @@ export async function GetPostDetail(slug: string) {
 
 export const getRecentPosts = gql`
   query GetRecentPosts {
-    posts(orderBy: createdAt_ASC, last: 3) {
+    posts(orderBy: createdAt_DESC, last: 3) {
       id
       title
       slug
@@ -109,7 +109,7 @@ export const getSimilarPosts = gql`
   }
 `
 
-export const getCategories = gql`
+export const GET_CATEGORIES = gql`
   query GetCategories {
     categories {
       id
@@ -149,3 +149,66 @@ export const GET_FEATURED_POSTS = gql`
     }
   }
 `
+
+
+export async function getCategories() {
+  const GetCategories = await apolloClient.query({
+    query: gql`
+      query {
+        categories {
+          id
+          name
+          slug
+        }
+      }
+    `
+  })
+  return GetCategories.data
+}
+
+export const QUERY_POSTS_BY_CATEGORY = gql`
+  query QueryPostsByCategory($slug: String!) {
+    postsConnection(where: {
+      categories_some: {slug: $slug}}
+      orderBy: createdAt_DESC
+      ) {
+      edges {
+        node {
+          author {
+            id
+            name
+            bio
+            avatar {
+              url
+            }
+          }
+          createdAt
+          id
+          title
+          slug
+          exerpt
+          banner {
+            url
+          }
+          categories {
+            id
+            name
+            slug
+          }
+        }
+      }
+    }
+  }    
+`
+
+export const getCategoryPost = async (slug: string) => {
+  const GetCategories = await apolloClient.query({
+    query: gql`
+    `,
+    variables: {
+      slug: slug
+    }    
+  })
+
+  return GetCategories.data;
+};
