@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import { PostCard } from '../../components/PostCard';
 import { BlogPost } from '../../../@types';
 import { Categories } from '../../components/Categories';
+import { Loader } from '../../components/Loader';
 
 type CategoryPostProps = {
   slug: string
@@ -20,6 +21,8 @@ export default function CategoryPost({ slug }: CategoryPostProps) {
     variables: { slug }
   });
 
+  if (loading || !data) return <Loader />
+  
   return (
     <div className="container mx-auto px-10 mb-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">

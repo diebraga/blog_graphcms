@@ -7,12 +7,20 @@ import { PostDetail } from "../../components/PostDetail";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { GetPostDetail, GetPosts } from "../../graphql/queries";
 import { BlogPost } from "../../../@types";
+import { useRouter } from "next/dist/client/router";
+import { Loader } from "../../components/Loader";
 
 type PostDetailPageProps = {
   blogPost: BlogPost['node']
 }
 
 export default function PostDetailPage({ blogPost }: PostDetailPageProps) {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <Loader />;
+  }
+
   return (
     <div className="container mx-auto px-10 mb-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -53,7 +61,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const data = await GetPosts()
   return {
     paths: data.postsConnection.edges.map(({ node: { slug }}: getStaticPathsProps) => ({ params: { slug } })),
-    fallback: false
+    fallback: true
   };
 };
 
